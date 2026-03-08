@@ -1,9 +1,9 @@
 <?php
     mysqli_report(MYSQLI_REPORT_OFF);
-$hostname = 'sql112.infinityfree.com';
-$dbName = 'if0_41302153_event_db';
-$username = 'if0_41302153';
-$password = 'WUpjrxU8OqnZ1';
+$hostname = 'localhost';
+$dbName = 'events_web';
+$username = 'admin1';
+$password = '1234abc';
 $conn = new mysqli($hostname, $username, $password, $dbName);
 
 if (!$conn->connect_error) {

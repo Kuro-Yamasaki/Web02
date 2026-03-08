@@ -87,6 +87,7 @@ $events = getEventsByOrganizer($_SESSION['user_id']);
                                 <a href="/templates/event_registrations.php?event_id=<?php echo $event['event_id']; ?>" class="btn-action btn-manage">👥 ดูผู้สมัคร</a>
                                 
                                 <a href="/routes/event.php?action=delete&id=<?php echo $event['event_id']; ?>" class="btn-action btn-delete" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบกิจกรรมนี้? ข้อมูลผู้สมัครทั้งหมดจะถูกลบไปด้วย');">🗑️ ลบ</a>
+                                <a href="event_checkin.php?event_id=<?php echo $event['event_id']; ?>" class="checkin-btn">✅ ตรวจคนเข้างาน</a>
                             </div>
                         </td>
                     </tr>
