@@ -28,73 +28,89 @@ $registrations = getRegistrationsByEvent($event_id);
         .btn-checkin:hover { background-color: #27ae60; }
         .btn-undo { background-color: #95a5a6; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; display: inline-block;}
         .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.9em; font-weight: bold;}
+        .otp-box { background-color: #fff3cd; border: 2px dashed #ffeeba; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; }
         
-        /* สไตล์กล่องตรวจ OTP */
-        .otp-box {
-            background-color: #fff3cd;
-            border: 2px dashed #ffeeba;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 20px 0;
-        }
+        /* เพิ่ม Animation ให้ตารางตอนเปลี่ยนสี */
+        tr { transition: background-color 0.8s ease; }
     </style>
 </head>
 <body>
 
-     <div class="container">
+<div class="container">
     <h2>📍 ระบบเช็คชื่อหน้างาน: <?php echo htmlspecialchars($event['event_name']); ?></h2>
     <a href="/templates/manage_event.php" style="color: #3498db; text-decoration: none;">⬅ กลับหน้าจัดการกิจกรรม</a>
 
     <div class="otp-box">
         <h3 style="margin-top: 0; color: #856404;">🔍 ตรวจสอบรหัสเข้างาน (OTP)</h3>
         <p style="color: #856404; font-size: 14px; margin-bottom: 15px;">
-            กรอกรหัส 6 หลักที่ผู้เข้าร่วมแสดงในหน้าตั๋ว ระบบจะทำการเช็คชื่อให้อัตโนมัติ
+            กรอกรหัส 6 หลักที่ผู้เข้าร่วมแสดง ระบบจะหาชื่อและเช็คชื่อให้อัตโนมัติ
         </p>
         
-        <form action="/routes/Registration.php" method="POST" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
-            <input type="hidden" name="action" value="verify_otp_frontdesk">
-            
-            <input type="text" name="otp_input" placeholder="เลข 6 หลัก..." maxlength="6" required 
+        <form onsubmit="event.preventDefault(); verifyGlobalOTP(<?php echo $event_id; ?>);" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+            <input type="text" id="global_otp" placeholder="เลข 6 หลัก..." maxlength="6" required autocomplete="off"
                    style="padding: 12px 15px; font-size: 20px; width: 180px; text-align: center; border: 2px solid #ffda6a; border-radius: 5px; outline: none; letter-spacing: 3px; font-weight: bold;">
             
             <button type="submit" style="background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s;">
                 ตรวจสอบ & เช็คอิน
             </button>
         </form>
+
+        <div id="global_status" style="margin-top: 15px; font-size: 16px; font-weight: bold;"></div>
     </div>
-</div>
-    
 
-<script>
+    <script>
+function verifyGlobalOTP(eventId) {
+    const otpInput = document.getElementById('global_otp');
+    const statusText = document.getElementById('global_status');
+    const otp = otpInput.value;
 
-function verifyOTP(email, inputId, statusId) {
-    const otp = document.getElementById(inputId).value;
-    const statusText = document.getElementById(statusId);
-
-    if(!otp) {
-        statusText.innerText = "กรุณากรอกรหัสก่อน";
-        statusText.style.color = "red";
+    if(otp.length !== 6) {
+        statusText.innerHTML = "❌ <span style='color:red;'>กรุณากรอกรหัส 6 หลักให้ครบถ้วน</span>";
         return;
     }
 
-    const formData = new FormData();
-    formData.append('email', email);
-    formData.append('otp', otp);
+    statusText.innerHTML = "⏳ <span style='color:#856404;'>กำลังค้นหาข้อมูลและเช็คอิน...</span>";
 
-    fetch('api/verify_otp.php', { method: 'POST', body: formData })
-    .then(res => res.json())
-    .then(data => {
-        statusText.innerText = data.message;
-        statusText.style.color = data.status === 'success' ? 'green' : 'red';
+    const formData = new FormData();
+    formData.append('otp', otp);
+    formData.append('event_id', eventId);
+
+    // ยิงไปที่ API
+    fetch('/api/verify_otp.php', { method: 'POST', body: formData })
+    .then(res => res.text()) // 💡 รับค่ากลับมาเป็น Text ธรรมดาก่อน เพื่อดักจับ Error PHP
+    .then(text => {
+        console.log("ข้อความที่ได้จากเซิร์ฟเวอร์:", text); // พิมพ์ลง Console เผื่อใช้ดูบัค
         
-        if(data.status === 'success') {
-            // ถ้ายืนยันสำเร็จ ให้ซ่อนปุ่มหรือทำเครื่องหมายว่ามาแล้ว
-            document.getElementById(inputId).disabled = true;
+        try {
+            // ลองแปลงเป็น JSON
+            const data = JSON.parse(text);
+            
+            if(data.status === 'success') {
+                // โชว์ชื่อ และข้อความสีเขียว
+                statusText.innerHTML = `✅ <span style='color:green;'>${data.message}</span> <br><span style='color: #0056b3; font-size: 22px; margin-top:10px; display:block;'>ผู้เข้าร่วม: <u>${data.user_name}</u></span>`;
+                otpInput.value = ""; 
+                
+                // 💡 สั่งให้รีเฟรชหน้าเว็บหลังจากผ่านไป 1.5 วินาที เพื่อให้ข้อมูลในตารางชัวร์ที่สุด
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+
+            } else {
+                statusText.innerHTML = `❌ <span style='color:red;'>${data.message}</span>`;
+            }
+        } catch(e) {
+            // ถ้าแปลง JSON ไม่ได้ แปลว่า PHP น่าจะมี Error
+            statusText.innerHTML = `❌ <span style='color:red;'>ระบบตอบกลับผิดพลาด! (กด F12 ดูแถบ Console)</span>`;
+            console.error("เซิร์ฟเวอร์ส่งค่ามาผิดปกติ:", text);
         }
+    })
+    .catch(err => {
+        statusText.innerHTML = "❌ <span style='color:red;'>เกิดข้อผิดพลาดในการเชื่อมต่อ (Network Error)</span>";
+        console.error(err);
     });
 }
 </script>
+
     <table>
         <thead>
             <tr>
@@ -102,7 +118,7 @@ function verifyOTP(email, inputId, statusId) {
                 <th>ชื่อ-นามสกุล</th>
                 <th>อีเมล</th>
                 <th>สถานะเช็คชื่อ</th>
-                <th>จัดการ (Check-in)</th>
+                <th>จัดการ (Manual)</th>
             </tr>
         </thead>
         <tbody>
@@ -113,12 +129,12 @@ function verifyOTP(email, inputId, statusId) {
                     if ($reg['status'] == 'Approved'): 
                         $has_approved_users = true;
             ?>
-                <tr>
+                <tr id="row_<?php echo $reg['registration_id']; ?>">
                     <td>#<?php echo $reg['registration_id']; ?></td>
                     <td style="text-align: left; font-weight: bold;"><?php echo htmlspecialchars($reg['name']); ?></td>
                     <td><?php echo htmlspecialchars($reg['email']); ?></td>
                     
-                    <td>
+                    <td id="status_<?php echo $reg['registration_id']; ?>">
                         <?php if ($reg['is_checked_in'] == 1): ?>
                             <span class="status-badge" style="background-color: #badc58; color: #2f3640;">✅ เข้าร่วมแล้ว</span>
                         <?php else: ?>
@@ -126,11 +142,11 @@ function verifyOTP(email, inputId, statusId) {
                         <?php endif; ?>
                     </td>
                     
-                    <td>
+                    <td id="action_<?php echo $reg['registration_id']; ?>">
                         <?php if ($reg['is_checked_in'] == 0): ?>
-                            <a class="btn-checkin" href="/routes/Registration.php?action=checkin&id=<?php echo $reg['registration_id']; ?>&event_id=<?php echo $event_id; ?>">👉 เช็คชื่อเข้างาน</a>
+                            <a class="btn-checkin" href="/routes/Registration.php?action=checkin&id=<?php echo $reg['registration_id']; ?>&event_id=<?php echo $event_id; ?>">👉 เช็คชื่อ (ข้าม OTP)</a>
                         <?php else: ?>
-                            <a class="btn-undo" href="/routes/Registration.php?action=undo_checkin&id=<?php echo $reg['registration_id']; ?>&event_id=<?php echo $event_id; ?>">ยกเลิก</a>
+                            <a class="btn-undo" href="/routes/Registration.php?action=undo_checkin&id=<?php echo $reg['registration_id']; ?>&event_id=<?php echo $event_id; ?>">ยกเลิกการเช็คอิน</a>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -147,6 +163,8 @@ function verifyOTP(email, inputId, statusId) {
             <?php endif; ?>
         </tbody>
     </table>
+
+</div>
 
 </body>
 </html>
