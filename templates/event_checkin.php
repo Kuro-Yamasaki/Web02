@@ -43,28 +43,28 @@ $registrations = getRegistrationsByEvent($event_id);
 <body>
 
      <div class="container">
-        <h2>📍 ระบบเช็คชื่อหน้างาน: <?php echo htmlspecialchars($event['event_name']); ?></h2>
-        <a href="/templates/manage_event.php" style="color: #3498db; text-decoration: none;">⬅ กลับหน้าจัดการกิจกรรม</a>
+    <h2>📍 ระบบเช็คชื่อหน้างาน: <?php echo htmlspecialchars($event['event_name']); ?></h2>
+    <a href="/templates/manage_event.php" style="color: #3498db; text-decoration: none;">⬅ กลับหน้าจัดการกิจกรรม</a>
 
-        <div class="otp-box">
-            <h3 style="margin-top: 0; color: #856404;">🔍 ตรวจสอบรหัสเข้างาน (OTP)</h3>
-            <p style="color: #856404; font-size: 14px; margin-bottom: 15px;">
-                กรอกรหัส 6 หลักที่ผู้เข้าร่วมแสดงในหน้าตั๋ว ระบบจะทำการเช็คชื่อให้อัตโนมัติ
-            </p>
+    <div class="otp-box">
+        <h3 style="margin-top: 0; color: #856404;">🔍 ตรวจสอบรหัสเข้างาน (OTP)</h3>
+        <p style="color: #856404; font-size: 14px; margin-bottom: 15px;">
+            กรอกรหัส 6 หลักที่ผู้เข้าร่วมแสดงในหน้าตั๋ว ระบบจะทำการเช็คชื่อให้อัตโนมัติ
+        </p>
+        
+        <form action="/routes/Registration.php" method="POST" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+            <input type="hidden" name="action" value="verify_otp_frontdesk">
             
-            <form action="/routes/Registration.php" method="POST" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
-                <input type="hidden" name="action" value="verify_otp_frontdesk">
-                <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
-                
-                <input type="text" name="otp_input" placeholder="เลข 6 หลัก..." maxlength="6" required 
-                       style="padding: 12px 15px; font-size: 20px; width: 180px; text-align: center; border: 2px solid #ffda6a; border-radius: 5px; outline: none; letter-spacing: 3px; font-weight: bold;">
-                
-                <button type="submit" style="background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s;">
-                    ตรวจสอบ & เช็คอิน
-                </button>
-            </form>
-        </div>
-    <a href="/templates/home.php">⬅ กลับหน้ารายการกิจกรรม</a>
+            <input type="text" name="otp_input" placeholder="เลข 6 หลัก..." maxlength="6" required 
+                   style="padding: 12px 15px; font-size: 20px; width: 180px; text-align: center; border: 2px solid #ffda6a; border-radius: 5px; outline: none; letter-spacing: 3px; font-weight: bold;">
+            
+            <button type="submit" style="background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s;">
+                ตรวจสอบ & เช็คอิน
+            </button>
+        </form>
+    </div>
+</div>
+    
 
 <script>
 

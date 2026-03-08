@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
     $otp = rand(100000, 999999);
     
     // ตั้งเวลาหมดอายุ 5 นาที (300 วินาที)
-    $expires_at = time() + 300; 
+    $expires_at = time() + 1800; 
 
     // --- ส่วนบันทึกข้อมูลลงไฟล์ JSON แทน Database ---
     $json_file = '../databases/otp_data.json';
