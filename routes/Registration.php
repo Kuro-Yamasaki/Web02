@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($event_id > 0) {
             if (createRegistration($user_id, $event_id)) {
-                echo "<script>alert('ส่งคำขอเข้าร่วมกิจกรรมสำเร็จ! กรุณารอผู้จัดอนุมัติ'); window.location.href='/';</script>";
+                echo "<script>alert('ส่งคำขอเข้าร่วมกิจกรรมสำเร็จ! กรุณารอผู้จัดอนุมัติ'); window.location.href='/entrypj/templates/home.php';</script>";
             } else {
                 echo "<script>alert('คุณได้ส่งคำขอเข้าร่วมกิจกรรมนี้ไปแล้ว หรือเกิดข้อผิดพลาด!'); window.history.back();</script>";
             }

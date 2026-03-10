@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action'])) {
 
     if ($action == 'delete' && $id > 0) {
         if (deleteEvent($id)) {
-            // ✅ เปลี่ยนให้เด้งไป manage_event แทน home
             echo "<script>alert('ลบกิจกรรมเรียบร้อยแล้ว'); window.location.href='/templates/manage_event.php';</script>";
         } else {
             echo "<script>alert('เกิดข้อผิดพลาดในการลบ'); window.history.back();</script>";
