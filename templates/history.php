@@ -1,5 +1,4 @@
 <?php
-// 1. ต้องเปิดใช้งาน Session เป็นบรรทัดแรกเสมอ
 session_start();
 
 require_once __DIR__ . '/../Include/database.php';
@@ -7,27 +6,11 @@ require_once __DIR__ . '/../databases/Registrations.php';
 
 // ตรวจสอบการล็อกอิน
 if (empty($_SESSION['user_id'])) {
-    header("Location: /templates/sign_in.php");
+    header("Location: /entrypj/templates/sign_in.php");
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
-
-// 2. ดึงอีเมลด้วยรูปแบบ MySQLi ให้ตรงกับไฟล์ database.php ของคุณ
-$conn = getConnection(); 
-if ($conn) {
-    $stmt = $conn->prepare("SELECT email FROM users WHERE user_id = ?");
-    $stmt->bind_param("i", $user_id); // "i" หมายถึง Integer (ตัวเลข)
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $userData = $result->fetch_assoc();
-    $user_email = $userData ? $userData['email'] : '';
-    $stmt->close();
-} else {
-    $user_email = '';
-}
-
-// ดึงประวัติกิจกรรม
 $history = getUserHistory($user_id);
 ?>
 
@@ -55,10 +38,8 @@ $history = getUserHistory($user_id);
         
         .empty-state { text-align: center; padding: 50px; color: #95a5a6; font-size: 1.1em; }
         
-        /* สไตล์ปุ่ม OTP */
-        .btn-otp { background-color: #3498db; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 0.9em; transition: 0.3s; }
+        .btn-otp { background-color: #3498db; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 0.9em; transition: 0.3s; text-decoration: none; display: inline-block;}
         .btn-otp:hover { background-color: #2980b9; }
-        .btn-otp:disabled { background-color: #bdc3c7; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -66,7 +47,7 @@ $history = getUserHistory($user_id);
     <?php include __DIR__ . '/header.php'; ?> 
 
     <div class="container">
-        <a href="/" class="btn-back">⬅ กลับหน้ารายการกิจกรรม</a>
+        <a href="/entrypj/templates/home.php" class="btn-back">⬅ กลับหน้ารายการกิจกรรม</a>
         <h2>📜 ประวัติการขอเข้าร่วมกิจกรรมของคุณ</h2>
 
         <table>
@@ -76,7 +57,8 @@ $history = getUserHistory($user_id);
                     <th>วันที่เริ่ม</th>
                     <th>สถานที่</th>
                     <th>สถานะ</th>
-                    <th>เช็คอินหน้างาน</th> </tr>
+                    <th>เช็คอินหน้างาน</th> 
+                </tr>
             </thead>
             <tbody>
                 <?php if (!empty($history)): ?>
@@ -87,6 +69,10 @@ $history = getUserHistory($user_id);
                         <td><?php echo htmlspecialchars($row['location']); ?></td>
                         <?php 
                             $status = empty($row['status']) ? 'pending' : strtolower($row['status']); 
+                            
+                            // เช็คว่าถึงเวลาเริ่มกิจกรรมหรือยัง
+                            $current_time = time();
+                            $start_time = strtotime($row['start_date']);
                         ?>
                         <td>
                             <span class="badge badge-<?php echo $status; ?>">
@@ -99,8 +85,11 @@ $history = getUserHistory($user_id);
                         </td>
                         <td>
                             <?php if ($status == 'approved'): ?>
-                                <button class="btn-otp" onclick="requestOTP(this, '<?php echo htmlspecialchars($user_email); ?>')">📍 ขอรหัส OTP</button>
-                                <div class="otp-message" style="font-size: 0.85em; margin-top: 5px; font-weight: bold;"></div>
+                                <?php if ($current_time >= $start_time): ?>
+                                    <a href="/entrypj/templates/user_checkin_otp.php?event_id=<?php echo $row['event_id']; ?>" class="btn-otp">📍 ไปหน้าเช็คอิน (OTP)</a>
+                                <?php else: ?>
+                                    <span style="color: #f39c12; font-size: 0.9em; font-weight: bold;">⏳ รอกิจกรรมเริ่ม</span>
+                                <?php endif; ?>
                             <?php else: ?>
                                 <span style="color: #95a5a6; font-size: 0.9em;">ยังไม่สามารถเช็คอินได้</span>
                             <?php endif; ?>
@@ -120,53 +109,5 @@ $history = getUserHistory($user_id);
         </table>
     </div>
 
-    <script>
-    function requestOTP(btn, email) {
-        if (!email) {
-            alert('ไม่พบข้อมูลอีเมลของคุณ กรุณาล็อกอินใหม่');
-            return;
-        }
-
-        const msgDiv = btn.nextElementSibling; // div สำหรับแสดงข้อความใต้ปุ่ม
-        btn.disabled = true;
-        btn.innerText = "กำลังส่ง...";
-        msgDiv.style.color = "orange";
-        msgDiv.innerText = "กรุณารอสักครู่...";
-
-        const formData = new FormData();
-        formData.append('email', email);
-
-        fetch('/api/send_otp.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.status === 'success') {
-                msgDiv.style.color = "green";
-                msgDiv.innerText = "ส่งแล้ว! โปรดเช็คอีเมล (อายุ 5 นาที)";
-                btn.innerText = "ส่งรหัสสำเร็จ";
-                
-                // ให้กดขอใหม่ได้เมื่อผ่านไป 1 นาที
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerText = "📍 ขอรหัส OTP ใหม่";
-                    msgDiv.innerText = "";
-                }, 60000);
-            } else {
-                msgDiv.style.color = "red";
-                msgDiv.innerText = data.message;
-                btn.disabled = false;
-                btn.innerText = "📍 ขอรหัส OTP";
-            }
-        })
-        .catch(error => {
-            msgDiv.style.color = "red";
-            msgDiv.innerText = "เกิดข้อผิดพลาดในการเชื่อมต่อ";
-            btn.disabled = false;
-            btn.innerText = "📍 ขอรหัส OTP";
-        });
-    }
-    </script>
 </body>
 </html>

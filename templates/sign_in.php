@@ -1,5 +1,14 @@
+<?php
+if (!empty($_SESSION['user_id'])) { 
+    header("Location: /entrypj/templates/home.php");
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="th">
+    
 
 <head>
     <meta charset="UTF-8">
@@ -34,7 +43,7 @@
     <h1 class="text-2xl font-light mb-4">Sign in to YourApp</h1>
 
     <div class="bg-white border border-[#d8dee4] rounded-lg p-5 w-full max-w-[308px] shadow-sm">
-        <form action="/routes/User.php" method="POST" class="space-y-4">
+        <form action="/entrypj/routes/User.php" method="POST" class="space-y-4">
             <input type="hidden" name="action" value="login">
 
             <div>

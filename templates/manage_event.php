@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Include/database.php';
 require_once __DIR__ . '/../databases/Events.php';
 
 if (empty($_SESSION['user_id'])) {
-    header("Location: /templates/sign_in.php");
+    header("Location: /entrypj/templates/sign_in.php");
     exit();
 }
 
@@ -59,7 +59,7 @@ $events = getEventsByOrganizer($_SESSION['user_id']);
     <div class="container">
         <div class="header-action">
             <h2>⚙️ จัดการกิจกรรมของฉัน</h2>
-            <a href="/templates/create_event.php" class="btn-create">➕ สร้างกิจกรรมใหม่</a>
+            <a href="/entrypj/templates/create_event.php" class="btn-create">➕ สร้างกิจกรรมใหม่</a>
         </div>
 
         <table>
@@ -82,12 +82,11 @@ $events = getEventsByOrganizer($_SESSION['user_id']);
                         <td><?php echo $event['max_participants']; ?> คน</td>
                         <td>
                             <div class="action-buttons" style="justify-content: center;">
-                                <a href="/templates/edit_event.php?id=<?php echo $event['event_id']; ?>" class="btn-action btn-edit">✏️ แก้ไข</a>
+                                <a href="/entrypj/templates/edit_event.php?id=<?php echo $event['event_id']; ?>" class="btn-action btn-edit">✏️ แก้ไข</a>
                                 
-                                <a href="/templates/event_registrations.php?event_id=<?php echo $event['event_id']; ?>" class="btn-action btn-manage">👥 ดูผู้สมัคร</a>
+                                <a href="/entrypj/templates/event_registrations.php?event_id=<?php echo $event['event_id']; ?>" class="btn-action btn-manage">👥 ดูผู้สมัคร</a>
                                 
-                                <a href="/routes/event.php?action=delete&id=<?php echo $event['event_id']; ?>" class="btn-action btn-delete" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบกิจกรรมนี้? ข้อมูลผู้สมัครทั้งหมดจะถูกลบไปด้วย');">🗑️ ลบ</a>
-                                <a href="event_checkin.php?event_id=<?php echo $event['event_id']; ?>" class="checkin-btn">✅ ตรวจคนเข้างาน</a>
+                                <a href="/entrypj/routes/event.php?action=delete&id=<?php echo $event['event_id']; ?>" class="btn-action btn-delete" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบกิจกรรมนี้? ข้อมูลผู้สมัครทั้งหมดจะถูกลบไปด้วย');">🗑️ ลบ</a>
                             </div>
                         </td>
                     </tr>
@@ -97,7 +96,7 @@ $events = getEventsByOrganizer($_SESSION['user_id']);
                         <td colspan="5">
                             <div class="empty-state">
                                 📭 คุณยังไม่ได้สร้างกิจกรรมใดๆ <br><br>
-                                <a href="/templates/create_event.php" style="color: #3498db; text-decoration: none; font-weight: bold;">คลิกที่นี่เพื่อสร้างกิจกรรมแรกของคุณ</a>
+                                <a href="/entrypj/templates/create_event.php" style="color: #3498db; text-decoration: none; font-weight: bold;">คลิกที่นี่เพื่อสร้างกิจกรรมแรกของคุณ</a>
                             </div>
                         </td>
                     </tr>

@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action'])) {
 
     if ($action == 'delete' && $id > 0) {
         if (deleteEvent($id)) {
-            echo "<script>alert('ลบกิจกรรมเรียบร้อยแล้ว'); window.location.href='/templates/manage_event.php';</script>";
+            // ✅ เปลี่ยนให้เด้งไป manage_event แทน home
+            echo "<script>alert('ลบกิจกรรมเรียบร้อยแล้ว'); window.location.href='/entrypj/templates/manage_event.php';</script>";
         } else {
             echo "<script>alert('เกิดข้อผิดพลาดในการลบ'); window.history.back();</script>";
         }
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $target_file = $upload_dir . $file_name;
 
                         if (move_uploaded_file($_FILES['event_images']['tmp_name'][$i], $target_file)) {
-                            $image_path = '/uploads/' . $file_name;
+                            $image_path = '/entrypj/uploads/' . $file_name;
                             
                             addEventImage($id, $image_path); 
                         }
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
-            echo "<script>alert('แก้ไขข้อมูลกิจกรรมสำเร็จ!'); window.location.href='/templates/manage_event.php';</script>";
+            echo "<script>alert('แก้ไขข้อมูลกิจกรรมสำเร็จ!'); window.location.href='/entrypj/templates/manage_event.php';</script>";
         } else {
             echo "<script>alert('เกิดข้อผิดพลาดในการแก้ไขข้อมูล'); window.history.back();</script>";
         }
@@ -107,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (move_uploaded_file($_FILES['event_images']['tmp_name'][$i], $target_file)) {
 
-                            $image_path = '/uploads/' . $file_name;
+                            $image_path = '/entrypj/uploads/' . $file_name;
                             addEventImage($new_event_id, $image_path);
                         }
                     }
@@ -116,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             echo "<script>
                     alert('บันทึกกิจกรรมและอัปโหลดรูปภาพเรียบร้อยแล้ว!'); 
-                    window.location.href='/templates/manage_event.php';
+                    window.location.href='/entrypj/templates/manage_event.php';
                   </script>";
             exit();
         } else {

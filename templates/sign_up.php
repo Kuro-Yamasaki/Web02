@@ -34,7 +34,7 @@
     <h1 class="text-2xl font-light mb-4">Create your account</h1>
 
     <div class="bg-white border border-[#d8dee4] rounded-lg p-5 w-full max-w-[340px] shadow-sm">
-        <form action="/routes/User.php?url=User" method="POST" class="space-y-4">
+        <form action="/entrypj/routes/User.php?url=User" method="POST" class="space-y-4">
             <input type="hidden" name="action" value="register">
 
             <div>

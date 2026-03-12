@@ -1,19 +1,28 @@
 <?php
     mysqli_report(MYSQLI_REPORT_OFF);
-$hostname = 'localhost';
-$dbName = 'events_web';
-$username = 'admin1';
-$password = '1234abc';
+$hostname = 'gonggang.net';
+$dbName = 'u910454988_entrypj';
+$username = 'u910454988_entrypj';
+$password = '[Z8H>|Kz:[9D@mR7';
 $conn = new mysqli($hostname, $username, $password, $dbName);
 
-if (!$conn->connect_error) {
-    $conn->set_charset("utf8mb4");
-}
 
-// ใช้ @ เพื่อซ่อน Error พื้นฐาน และจัดการเอง
-$conn = @new mysqli($hostname, $username, $password, $dbName);
-if ($conn) {
-    $conn->set_charset("utf8mb4");
+if (!isset($conn)) {
+    $servername = "localhost"; // หรือ IP ของโฮสต์
+    $username = "u910454988_entrypj";
+    $password = "รหัสผ่านของคุณ";
+    $dbname = "u910454988_entrypj";
+
+    // สร้างการเชื่อมต่อ
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // ดักจับ Error หากเชื่อมต่อไม่ได้ (ป้องกัน Fatal Error บรรทัด set_charset)
+    if ($conn->connect_error) {
+        die("ขออภัย เว็บไซต์มีการใช้งานฐานข้อมูลเกินขีดจำกัดชั่วคราว กรุณารอสักครู่แล้วรีเฟรชใหม่อีกครั้ง");
+    }
+
+    // เซ็ตภาษา
+    $conn->set_charset("utf8");
 }
 
 function getConnection(): mysqli

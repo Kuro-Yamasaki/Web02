@@ -45,12 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $mail->Password   = 'oyrwoartyhssjjww';    // App Password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
         $mail->Port       = 587;
-
+        $mail->CharSet    = 'UTF-8';
         $mail->setFrom('webproject.ajm.noreply@gmail.com', 'Event Check-in System');
         $mail->addAddress($userEmail);
         $mail->isHTML(true);
         $mail->Subject = 'รหัส OTP สำหรับเช็คอินกิจกรรม';
-        $mail->Body    = "กรุณาแจ้งรหัสนี้กับผู้จัดงาน: <b style='font-size:24px; color:blue;'>{$otp}</b><br>รหัสนี้จะหมดอายุภายใน 5 นาที";
+        $mail->Body    = "กรุณาแจ้งรหัสนี้กับผู้จัดงาน: <b style='font-size:24px; color:blue;'>{$otp}</b><br>รหัสนี้จะหมดอายุภายใน 30 นาที";
 
         $mail->send();
         echo json_encode(['status' => 'success', 'message' => 'ส่ง OTP ไปที่อีเมลแล้ว']);

@@ -221,7 +221,7 @@ require_once __DIR__ . '/../databases/Events.php';
     <div class="container">
         <h2>📝 สร้างกิจกรรมใหม่</h2>
 
-        <form action="/routes/event.php" method="POST" enctype="multipart/form-data">
+        <form action="/entrypj/routes/event.php" method="POST" enctype="multipart/form-data">
             
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="organizer_id" value="<?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : ''; ?>"> 
@@ -275,7 +275,7 @@ require_once __DIR__ . '/../databases/Events.php';
             
             <div class="bottom-actions">
                 <button type="submit" class="btn-create">สร้าง</button>
-               <a href="/templates/manage_event.php" class="btn-cancel">ยกเลิก</a>
+               <a href="/entrypj/templates/manage_event.php" class="btn-cancel">ยกเลิก</a>
             </div>
 
         </form>
