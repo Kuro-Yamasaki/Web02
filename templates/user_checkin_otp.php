@@ -1,11 +1,11 @@
 <?php
-session_start();
+
 
 require_once __DIR__ . '/../Include/database.php';
 
 // ตรวจสอบการล็อกอิน
 if (empty($_SESSION['user_id'])) {
-    header("Location: /entrypj/templates/sign_in.php");
+    header("Location: /entrypj/sign_in.php");
     exit();
 }
 
@@ -65,7 +65,7 @@ $stmt->close();
         <button id="btnSubmit" class="btn-submit" onclick="verifyOTP(<?php echo $event_id; ?>)">✅ ยืนยันการเช็คอิน</button>
         <div id="verifyMsg" class="message-box"></div>
 
-        <a href="/entrypj/templates/history.php" class="btn-back">⬅ กลับหน้าประวัติกิจกรรม</a>
+        <a href="/entrypj/history.php" class="btn-back">⬅ กลับหน้าประวัติกิจกรรม</a>
     </div>
 
     <script>
@@ -93,7 +93,7 @@ $stmt->close();
         .then(data => {
             if(data.status === 'success') {
                 msg.style.color = "green";
-                msg.innerText = "ส่งรหัส OTP ไปที่อีเมลแล้ว! (รหัสมีอายุ 5 นาที)";
+                msg.innerText = "ส่งรหัส OTP ไปที่อีเมลแล้ว! (รหัสมีอายุ 30 นาที)";
                 btn.innerText = "ส่งสำเร็จแล้ว";
                 
                 setTimeout(() => {
@@ -143,7 +143,7 @@ $stmt->close();
                 msg.style.color = "green";
                 msg.innerText = "✅ เช็คอินสำเร็จแล้ว!";
                 alert(data.message + " ยินดีต้อนรับคุณ " + data.user_name);
-                window.location.href = "/entrypj/templates/history.php"; // เด้งกลับหน้าประวัติ
+                window.location.href = "/entrypj/history.php"; // เด้งกลับหน้าประวัติ
             } else {
                 msg.style.color = "red";
                 msg.innerText = "❌ " + data.message;

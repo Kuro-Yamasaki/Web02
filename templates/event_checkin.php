@@ -32,7 +32,7 @@ $registrations = getRegistrationsByEvent($event_id);
 <body>
 
     <h2>📍 ระบบเช็คชื่อหน้างาน: <?php echo htmlspecialchars($event['event_name']); ?></h2>
-    <a href="/entrypj/templates/home.php">⬅ กลับหน้ารายการกิจกรรม</a>
+    <a href="/entrypj/home.php">⬅ กลับหน้ารายการกิจกรรม</a>
 
     <table>
         <thead>

@@ -1,6 +1,9 @@
 <?php
-if (!empty($_SESSION['user_id'])) { 
-    header("Location: /entrypj/templates/home.php");
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!empty($_SESSION['user_id'])) {
+    header("Location: /entrypj/home"); // <--- แก้ตรงนี้
     exit();
 }
 ?>

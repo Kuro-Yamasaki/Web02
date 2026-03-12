@@ -112,7 +112,7 @@
     <div class="main-header">
         
         <div class="header-logo">
-            <a href="/entrypj/templates/home.php">🏠 หน้าหลัก</a>
+            <a href="/entrypj/home.php">🏠 หน้าหลัก</a>
         </div>
 
         <div class="header-nav">
@@ -120,9 +120,9 @@
                 👋 สวัสดี, <span><?php echo htmlspecialchars($_SESSION['name'] ?? 'ผู้ใช้งาน'); ?></span>
             </div>
             
-            <a href="/entrypj/templates/profile.php" class="nav-link">👤 ข้อมูลบัญชี</a>
-            <a href="/entrypj/templates/history.php" class="nav-link">📜 ประวัติ</a>
-            <a href="/entrypj/templates/manage_event.php" class="nav-link">⚙️ จัดการกิจกรรม</a>
+            <a href="/entrypj/profile.php" class="nav-link">👤 ข้อมูลบัญชี</a>
+            <a href="/entrypj/history.php" class="nav-link">📜 ประวัติ</a>
+            <a href="/entrypj/manage_event.php" class="nav-link">⚙️ จัดการกิจกรรม</a>
             
             <a href="/entrypj/routes/User.php?action=logout" class="btn-logout">🚪 ออกจากระบบ</a>
         </div>
@@ -130,6 +130,6 @@
     </div>
 <?php else: ?>
     <div class="alert-warning">
-        <span>⚠️ คุณยังไม่ได้เข้าสู่ระบบ <a href="/entrypj/templates/sign_in.php">คลิกที่นี่เพื่อเข้าสู่ระบบ</a> หรือสมัครสมาชิกเพื่อลงทะเบียนเข้าร่วมกิจกรรม</span>
+        <span>⚠️ คุณยังไม่ได้เข้าสู่ระบบ <a href="/entrypj/sign_in.php">คลิกที่นี่เพื่อเข้าสู่ระบบ</a> หรือสมัครสมาชิกเพื่อลงทะเบียนเข้าร่วมกิจกรรม</span>
     </div>
 <?php endif; ?>

@@ -1,12 +1,12 @@
 <?php
-session_start();
+
 
 // ดึงไฟล์ฐานข้อมูลมาใช้ เพื่อดึงข้อมูลเชิงลึกของผู้ใช้
 require_once __DIR__ . '/../Include/database.php';
 require_once __DIR__ . '/../databases/Users.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /entrypj/templates/sign_in.php");
+    header("Location: /entrypj/sign_in.php");
     exit();
 }
 

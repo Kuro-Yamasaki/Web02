@@ -1,5 +1,8 @@
 <?php
-session_start();
+// 1. เช็คก่อนเปิด Session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // ดึงไฟล์ฐานข้อมูลอย่างปลอดภัย
 require_once __DIR__ . '/../Include/database.php';
@@ -7,7 +10,8 @@ require_once __DIR__ . '/../databases/Registrations.php';
 
 // เช็คว่าล็อกอินหรือยัง
 if (empty($_SESSION['user_id'])) {
-    echo "<script>alert('กรุณาเข้าสู่ระบบก่อนทำรายการ'); window.location.href='/templates/sign_in.php';</script>";
+    // ✅ เปลี่ยนเป็น URL สั้น
+    echo "<script>alert('กรุณาเข้าสู่ระบบก่อนทำรายการ'); window.location.href='/entrypj/sign_in';</script>";
     exit();
 }
 
@@ -21,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($event_id > 0) {
             if (createRegistration($user_id, $event_id)) {
-                echo "<script>alert('ส่งคำขอเข้าร่วมกิจกรรมสำเร็จ! กรุณารอผู้จัดอนุมัติ'); window.location.href='/entrypj/templates/home.php';</script>";
+                // ✅ เปลี่ยนเป็น URL สั้น
+                echo "<script>alert('ส่งคำขอเข้าร่วมกิจกรรมสำเร็จ! กรุณารอผู้จัดอนุมัติ'); window.location.href='/entrypj/home';</script>";
             } else {
                 echo "<script>alert('คุณได้ส่งคำขอเข้าร่วมกิจกรรมนี้ไปแล้ว หรือเกิดข้อผิดพลาด!'); window.history.back();</script>";
             }
@@ -49,4 +54,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 }
-?>

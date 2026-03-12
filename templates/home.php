@@ -2,13 +2,16 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-session_start();
+// ตรวจสอบสถานะ Session ก่อนเปิด
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once __DIR__ . '/../Include/database.php';
 require_once __DIR__ . '/../databases/Events.php';
 
 if (empty($_SESSION['user_id'])) {
-    header("Location: /entrypj/templates/sign_in.php");
+    header("Location: /entrypj/sign_in.php");
     exit();
 }
 
@@ -382,7 +385,7 @@ if (!empty($all_events)) {
 
                 <div class="form-group" style="flex-direction: row; gap: 10px;">
                     <button type="submit" class="btn-search">🔍 ค้นหา</button>
-                    <a href="/entrypj/templates/home.php?filter=<?php echo $current_filter; ?>" class="btn-clear">ล้างค่า</a>
+                    <a href="/entrypj/home.php?filter=<?php echo $current_filter; ?>" class="btn-clear">ล้างค่า</a>
                 </div>
             </form>
         </div>
@@ -409,7 +412,7 @@ if (!empty($all_events)) {
                         </div>
                         
                         <div class="card-footer">
-                            <a href="/entrypj/templates/event_detail.php?id=<?php echo $event['event_id']; ?>" class="btn-view">
+                            <a href="/entrypj/event_detail.php?id=<?php echo $event['event_id']; ?>" class="btn-view">
                                 🔍 ดูรายละเอียด
                             </a>
 

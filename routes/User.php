@@ -1,12 +1,13 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once __DIR__ . '/../Include/database.php';
+require_once __DIR__ . '/../databases/Users.php';
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-session_start();
-
-// ✅ แก้ไข: ใช้ __DIR__ นำหน้าเพื่อป้องกันระบบมองหาไฟล์ผิดที่จนเกิด Error หน้าขาว
-require_once __DIR__ . '/../Include/database.php';
-require_once __DIR__ . '/../databases/Users.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'] ?? '';
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (createUser($userData)) {
             echo "<script>
                     alert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ'); 
-                    window.location.href='/entrypj/templates/sign_in.php';
+                    window.location.href='/entrypj/sign_in.php';
                   </script>";
         } else {
             echo "<script>alert('เกิดข้อผิดพลาด! อีเมลนี้อาจมีผู้ใช้งานแล้ว'); window.history.back();</script>";
@@ -49,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // แก้ให้เด้งกลับไปที่หน้าแรก
             echo "<script>
                     alert('เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ $show_name'); 
-                    window.location.href='/entrypj/templates/home.php';
+                    window.location.href='/entrypj/home.php';
                   </script>";
         } else {
             echo "<script>alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง'); window.history.back();</script>";
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         session_destroy(); 
         echo "<script>
                 alert('ออกจากระบบเรียบร้อยแล้ว ไว้พบกันใหม่ครับ!');
-                window.location.href='/entrypj/templates/sign_in.php';
+                window.location.href='/entrypj/sign_in.php';
               </script>";
         exit();
     }

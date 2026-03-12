@@ -1,10 +1,10 @@
 <?php
-session_start();
+
 require_once __DIR__ . '/../Include/database.php';
 require_once __DIR__ . '/../databases/Events.php';
 
 if (empty($_SESSION['user_id'])) {
-    header("Location: /entrypj/templates/sign_in.php");
+    header("Location: /entrypj/sign_in.php");
     exit();
 }
 
@@ -19,7 +19,7 @@ $event = getEventById($event_id);
 
 // ป้องกันคนอื่นแอบดูสถิติ (ต้องเป็นผู้จัดเท่านั้น)
 if ($event['organizer_id'] != $_SESSION['user_id']) {
-    echo "<script>alert('คุณไม่มีสิทธิ์ดูสถิติของกิจกรรมนี้'); window.location.href='/entrypj/templates/home.php';</script>";
+    echo "<script>alert('คุณไม่มีสิทธิ์ดูสถิติของกิจกรรมนี้'); window.location.href='/entrypj/home.php';</script>";
     exit();
 }
 
@@ -92,7 +92,7 @@ $max_age = max($age_ranges) > 0 ? max($age_ranges) : 1;
 <body>
     <?php include 'header.php'; ?> 
     <div class="container">
-        <a href="/entrypj/templates/event_registrations.php?event_id=<?php echo $event_id; ?>" style="text-decoration:none; font-weight:bold; color:#7f8c8d;">⬅ กลับหน้าจัดการผู้เข้าร่วม</a>
+        <a href="/entrypj/event_registrations.php?event_id=<?php echo $event_id; ?>" style="text-decoration:none; font-weight:bold; color:#7f8c8d;">⬅ กลับหน้าจัดการผู้เข้าร่วม</a>
         <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">📊 สถิติผู้เข้าร่วม: <?php echo htmlspecialchars($event['event_name']); ?></h2>
 
         <div class="card">

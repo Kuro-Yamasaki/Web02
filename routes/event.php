@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-session_start();
+
 // เติม __DIR__ เข้าไปเพื่อบอกตำแหน่งที่ชัดเจน เซิร์ฟเวอร์จะได้ไม่บล็อก
 require_once __DIR__ . '/../Include/database.php';
 require_once __DIR__ . '/../databases/Events.php';
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action'])) {
     if ($action == 'delete' && $id > 0) {
         if (deleteEvent($id)) {
             // ✅ เปลี่ยนให้เด้งไป manage_event แทน home
-            echo "<script>alert('ลบกิจกรรมเรียบร้อยแล้ว'); window.location.href='/entrypj/templates/manage_event.php';</script>";
+            echo "<script>alert('ลบกิจกรรมเรียบร้อยแล้ว'); window.location.href='/entrypj/manage_event.php';</script>";
         } else {
             echo "<script>alert('เกิดข้อผิดพลาดในการลบ'); window.history.back();</script>";
         }
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
-            echo "<script>alert('แก้ไขข้อมูลกิจกรรมสำเร็จ!'); window.location.href='/entrypj/templates/manage_event.php';</script>";
+            echo "<script>alert('แก้ไขข้อมูลกิจกรรมสำเร็จ!'); window.location.href='/entrypj/manage_event.php';</script>";
         } else {
             echo "<script>alert('เกิดข้อผิดพลาดในการแก้ไขข้อมูล'); window.history.back();</script>";
         }
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             echo "<script>
                     alert('บันทึกกิจกรรมและอัปโหลดรูปภาพเรียบร้อยแล้ว!'); 
-                    window.location.href='/entrypj/templates/manage_event.php';
+                    window.location.href='/entrypj/manage_event.php';
                   </script>";
             exit();
         } else {

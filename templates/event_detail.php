@@ -1,5 +1,8 @@
 <?php
-session_start();
+// ✅ เช็คก่อนเปิด Session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once __DIR__ . '/../Include/database.php';
 require_once __DIR__ . '/../databases/Events.php';
@@ -11,7 +14,8 @@ $event = getEventById($event_id);
 $images = getAllEventImages($event_id);
 
 if (!$event) {
-    echo "<script>alert('ไม่พบข้อมูลกิจกรรมนี้'); window.location.href='/';</script>";
+    // ✅ เปลี่ยนเป็น URL สั้น
+    echo "<script>alert('ไม่พบข้อมูลกิจกรรมนี้'); window.location.href='/entrypj/home';</script>";
     exit();
 }
 
@@ -275,7 +279,7 @@ $is_ended = (time() > strtotime($event['end_date']));
 <body>
     
     <div class="container">
-        <a href="/entrypj/templates/home.php" class="btn-back">⬅ กลับหน้ารายการกิจกรรม</a>
+        <a href="/entrypj/home" class="btn-back">⬅ กลับหน้ารายการกิจกรรม</a>
         
         <div class="header-section">
             <h1>📌 <?php echo htmlspecialchars($event['event_name']); ?></h1>
@@ -314,7 +318,7 @@ $is_ended = (time() > strtotime($event['end_date']));
         <div class="action-box">
             <?php if (!$user_id): ?>
                 <p style="color: var(--text-muted); margin-top: 0; margin-bottom: 20px; font-size: 1.1rem;">กรุณาเข้าสู่ระบบเพื่อขอเข้าร่วมกิจกรรมนี้</p>
-                <a href="/entrypj/templates/sign_in.php" class="btn-join" style="text-decoration: none;">🔒 เข้าสู่ระบบ</a>
+                <a href="/entrypj/sign_in" class="btn-join" style="text-decoration: none;">🔒 เข้าสู่ระบบ</a>
                 
             <?php else: ?>
                 <?php if ($registration_status == 'approved'): ?>
@@ -330,7 +334,7 @@ $is_ended = (time() > strtotime($event['end_date']));
                     <div class="status-badge status-full">🚫 ผู้เข้าร่วมเต็มแล้ว (<?php echo $current_joined; ?>/<?php echo $event['max_participants']; ?> คน)</div>
                 
                 <?php else: ?>
-                    <form action="/entrypj/routes/Registration.php" method="POST" style="margin: 0;">
+                    <form action="/entrypj/Registration" method="POST" style="margin: 0;">
                         <input type="hidden" name="action" value="request_join">
                         <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
                         <button type="submit" class="btn-join" onclick="return confirm('ยืนยันการขอเข้าร่วมกิจกรรมนี้?');">

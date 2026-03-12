@@ -1,12 +1,16 @@
 <?php
-session_start();
+// ✅ เช็คก่อนเปิด Session เพื่อป้องกัน Error
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // ✅ เติม __DIR__ เพื่อป้องกัน Error 500 บนเซิร์ฟเวอร์
 require_once __DIR__ . '/../Include/database.php';
 require_once __DIR__ . '/../databases/Events.php';
 
 if (empty($_SESSION['user_id'])) {
-    header("Location: /entrypj/templates/sign_in.php");
+    // ✅ ใช้ URL สั้น
+    header("Location: /entrypj/sign_in");
     exit();
 }
 
@@ -15,7 +19,8 @@ $event = getEventById($id);
 
 // ป้องกันคนอื่นแอบเข้า
 if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
-    echo "<script>alert('ไม่พบข้อมูลกิจกรรม หรือคุณไม่มีสิทธิ์แก้ไข'); window.location.href='/entrypj/templates/manage_event.php';</script>";
+    // ✅ ใช้ URL สั้น
+    echo "<script>alert('ไม่พบข้อมูลกิจกรรม หรือคุณไม่มีสิทธิ์แก้ไข'); window.location.href='/entrypj/manage_event';</script>";
     exit();
 }
 ?>
@@ -239,7 +244,7 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
     <div class="container">
         <h2>✏️ แก้ไขกิจกรรม: <?php echo htmlspecialchars($event['event_name']); ?></h2>
 
-        <form action="/entrypj/routes/event.php" method="POST" enctype="multipart/form-data">
+        <form action="/entrypj/event" method="POST" enctype="multipart/form-data">
             
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="event_id" value="<?php echo $event['event_id']; ?>">
@@ -294,7 +299,7 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
             
             <div class="bottom-actions">
                 <button type="submit" class="btn-create">💾 บันทึกการแก้ไข</button>
-                <a href="/entrypj/templates/manage_event.php" class="btn-cancel">ยกเลิก</a>
+                <a href="/entrypj/manage_event" class="btn-cancel">ยกเลิก</a>
             </div>
 
         </form>
