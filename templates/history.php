@@ -173,7 +173,7 @@ $stmt->close();
                 <div id="showOtpCode" class="otp-code-text">
                     ------
                 </div>
-                <p style="color: #e67e22; font-size: 0.95em; font-weight: bold;">⚠️ โปรดนำรหัสนี้ไปแสดงต่อผู้จัดงาน ⚠️<br>(รหัสมีอายุการใช้งาน 5 นาที)</p>
+                <p style="color: #e67e22; font-size: 0.95em; font-weight: bold;">⚠️ โปรดนำรหัสนี้ไปแสดงต่อผู้จัดงาน ⚠️<br>(รหัสมีอายุการใช้งาน 30 นาที)</p>
             </div>
         </div>
     </div>

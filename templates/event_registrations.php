@@ -90,7 +90,7 @@ unset($_SESSION['success_msg'], $_SESSION['error_msg']);
 
     <div class="container">
         <a href="/entrypj/manage_event" class="btn-back">⬅ กลับหน้าจัดการกิจกรรม</a>
-        <a href="/entrypj/templates/statistics.php?event_id=<?php echo $event_id; ?>" style="display: inline-block; margin-bottom: 20px; margin-left: 15px; text-decoration: none; background: #9b59b6; color: white; padding: 5px 15px; border-radius: 5px; font-weight: bold;">
+        <a href="/entrypj/statistics.php?event_id=<?php echo $event_id; ?>" style="display: inline-block; margin-bottom: 20px; margin-left: 15px; text-decoration: none; background: #9b59b6; color: white; padding: 5px 15px; border-radius: 5px; font-weight: bold;">
             📊 ดูสถิติกิจกรรมนี้
         </a>
 
