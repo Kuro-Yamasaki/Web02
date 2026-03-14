@@ -1,26 +1,5 @@
 <?php
 
-function getAllEvents() {
-    global $conn;
-    
-    // เปลี่ยน Events เป็น events และ Users เป็น users
-    $sql = "SELECT e.*, u.name AS organizer_name 
-            FROM events e 
-            LEFT JOIN users u ON e.organizer_id = u.user_id 
-            ORDER BY e.start_date DESC";
-            
-    $result = $conn->query($sql);
-    
-    $events = [];
-    if ($result && $result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $events[] = $row;
-        }
-    }
-    
-    return $events;
-}
-
 function getEventById($id) {
     global $conn;
     $stmt = $conn->prepare("SELECT * FROM events WHERE event_id = ?");

@@ -1,32 +1,6 @@
-<?php
-// ✅ เช็คก่อนเปิด Session เพื่อป้องกัน Error
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// ✅ เติม __DIR__ เพื่อป้องกัน Error 500 บนเซิร์ฟเวอร์
-require_once __DIR__ . '/../Include/database.php';
-require_once __DIR__ . '/../databases/Events.php';
-
-if (empty($_SESSION['user_id'])) {
-    // ✅ ใช้ URL สั้น
-    header("Location: /entrypj/sign_in");
-    exit();
-}
-
-$id = $_GET['id'] ?? 0;
-$event = getEventById($id);
-
-// ป้องกันคนอื่นแอบเข้า
-if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
-    // ✅ ใช้ URL สั้น
-    echo "<script>alert('ไม่พบข้อมูลกิจกรรม หรือคุณไม่มีสิทธิ์แก้ไข'); window.location.href='/entrypj/manage_event';</script>";
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +19,7 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
             background-color: #ffffff;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border: 2px solid #333;
         }
 
@@ -109,21 +83,29 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
             padding: 8px 12px;
             font-size: 18px;
             border-radius: 5px;
-            display: none; 
+            display: none;
             z-index: 10;
             transition: background 0.2s;
         }
 
-        .nav-btn:hover { background: rgba(0, 0, 0, 0.8); }
-        .prev-btn { left: 5px; }
-        .next-btn { right: 5px; }
+        .nav-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .prev-btn {
+            left: 5px;
+        }
+
+        .next-btn {
+            right: 5px;
+        }
 
         /* ตัวนับภาพ */
         .image-counter {
             position: absolute;
             bottom: 5px;
             right: 10px;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             color: white;
             padding: 3px 8px;
             border-radius: 10px;
@@ -207,7 +189,9 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
             transition: 0.3s;
         }
 
-        .btn-create:hover { background-color: #d68910; }
+        .btn-create:hover {
+            background-color: #d68910;
+        }
 
         .btn-cancel {
             background-color: #ecf0f1;
@@ -221,7 +205,9 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
             transition: 0.3s;
         }
 
-        .btn-cancel:hover { background-color: #bdc3c7; }
+        .btn-cancel:hover {
+            background-color: #bdc3c7;
+        }
 
         input[type="file"]::file-selector-button {
             border: 1px solid #3498db;
@@ -232,11 +218,13 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
             cursor: pointer;
             transition: 0.2s;
         }
+
         input[type="file"]::file-selector-button:hover {
             background-color: #2980b9;
         }
     </style>
 </head>
+
 <body>
 
     <?php include __DIR__ . '/header.php'; ?>
@@ -244,17 +232,17 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
     <div class="container">
         <h2>✏️ แก้ไขกิจกรรม: <?php echo htmlspecialchars($event['event_name']); ?></h2>
 
-        <form action="/entrypj/event" method="POST" enctype="multipart/form-data">
-            
+        <form action="/entrypj/edit_event?id=<?php echo $event['event_id']; ?>" method="POST" enctype="multipart/form-data">
+
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="event_id" value="<?php echo $event['event_id']; ?>">
-            
+
             <div class="top-section">
                 <div class="image-col">
                     <div class="image-preview-box" id="previewBox">
                         <span id="previewText">เลือกรูปใหม่<br><span style="font-size: 0.8em; color: #95a5a6;">(ถ้าต้องการเปลี่ยน)</span></span>
                         <img id="imagePreview" src="" alt="Preview">
-                        
+
                         <button type="button" class="nav-btn prev-btn" id="prevBtn" onclick="changeImage(-1)">&#10094;</button>
                         <button type="button" class="nav-btn next-btn" id="nextBtn" onclick="changeImage(1)">&#10095;</button>
                         <span class="image-counter" id="imageCounter">1/1</span>
@@ -266,7 +254,7 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
                 <div class="info-col">
                     <div class="form-group">
                         <label>ชื่อกิจกรรม</label>
-                        <input type="text" name="event_name" value="<?php echo htmlspecialchars($event['event_name']); ?>" required>
+                        <input type="text" require name="event_name" value="<?php echo htmlspecialchars($event['event_name']); ?>" required>
                     </div>
                     <div class="form-group" style="flex-grow: 1;">
                         <label>รายละเอียด</label>
@@ -278,25 +266,25 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
             <div class="middle-row">
                 <div class="form-group">
                     <label>สถานที่</label>
-                    <input type="text" name="location" value="<?php echo htmlspecialchars($event['location']); ?>">
+                    <input type="text" require name="location" value="<?php echo htmlspecialchars($event['location']); ?>">
                 </div>
                 <div class="form-group">
                     <label>จำนวนที่รับ (คน)</label>
-                    <input type="number" name="max_participants" value="<?php echo $event['max_participants']; ?>">
+                    <input type="number" require min="1" step="1" name="max_participants" value="<?php echo $event['max_participants']; ?>">
                 </div>
             </div>
 
             <div class="date-row">
                 <div class="form-group">
                     <label>วันเริ่มงาน</label>
-                    <input type="datetime-local" name="start_date" value="<?php echo date('Y-m-d\TH:i', strtotime($event['start_date'])); ?>" required>
+                    <input type="datetime-local" require name="start_date" value="<?php echo date('Y-m-d\TH:i', strtotime($event['start_date'])); ?>" required>
                 </div>
                 <div class="form-group">
                     <label>วันจบงาน</label>
-                    <input type="datetime-local" name="end_date" value="<?php echo date('Y-m-d\TH:i', strtotime($event['end_date'])); ?>" required>
+                    <input type="datetime-local" require name="end_date" value="<?php echo date('Y-m-d\TH:i', strtotime($event['end_date'])); ?>" required>
                 </div>
             </div>
-            
+
             <div class="bottom-actions">
                 <button type="submit" class="btn-create">💾 บันทึกการแก้ไข</button>
                 <a href="/entrypj/manage_event" class="btn-cancel">ยกเลิก</a>
@@ -305,79 +293,8 @@ if (!$event || $event['organizer_id'] != $_SESSION['user_id']) {
         </form>
     </div>
 
-    <script>
-        let uploadedImages = [];
-        let currentIndex = 0;
-
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const files = event.target.files;
-            uploadedImages = [];
-            currentIndex = 0;
-
-            const previewImg = document.getElementById('imagePreview');
-            const previewText = document.getElementById('previewText');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const counter = document.getElementById('imageCounter');
-
-            if (files.length > 0) {
-                previewText.style.display = 'none';
-                previewImg.style.display = 'block';
-                
-                // อ่านไฟล์ทั้งหมดเก็บลง Array
-                let loaded = 0;
-                for (let i = 0; i < files.length; i++) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        uploadedImages[i] = e.target.result; 
-                        loaded++;
-                        if (loaded === files.length) {
-                            updatePreviewDisplay();
-                        }
-                    };
-                    reader.readAsDataURL(files[i]);
-                }
-            } else {
-                // กรณีผู้ใช้กดยกเลิกการเลือกไฟล์
-                previewImg.src = "";
-                previewImg.style.display = 'none';
-                previewText.style.display = 'block';
-                prevBtn.style.display = 'none';
-                nextBtn.style.display = 'none';
-                counter.style.display = 'none';
-            }
-        });
-
-        function changeImage(step) {
-            currentIndex += step;
-            if (currentIndex < 0) currentIndex = uploadedImages.length - 1;
-            if (currentIndex >= uploadedImages.length) currentIndex = 0;
-            
-            updatePreviewDisplay();
-        }
-
-        function updatePreviewDisplay() {
-            const previewImg = document.getElementById('imagePreview');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const counter = document.getElementById('imageCounter');
-
-            if (uploadedImages.length > 0) {
-                previewImg.src = uploadedImages[currentIndex];
-                
-                if (uploadedImages.length > 1) {
-                    prevBtn.style.display = 'block';
-                    nextBtn.style.display = 'block';
-                    counter.style.display = 'block';
-                    counter.innerText = (currentIndex + 1) + " / " + uploadedImages.length;
-                } else {
-                    prevBtn.style.display = 'none';
-                    nextBtn.style.display = 'none';
-                    counter.style.display = 'none';
-                }
-            }
-        }
-    </script>
+    <script src="/entrypj/image-preview.js"></script>
 
 </body>
+
 </html>

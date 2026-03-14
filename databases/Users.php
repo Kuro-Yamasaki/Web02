@@ -1,11 +1,4 @@
 <?php
-function getUser():mysqli_result|bool
-{
-    global $conn;
-    $sql = 'select * from users';
-    $result = $conn->query($sql);
-    return $result;
-}
 
 function createUser($data) {
     global $conn;
