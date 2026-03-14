@@ -118,8 +118,6 @@ unset($_SESSION['success_msg'], $_SESSION['error_msg']);
                 <tr>
                     <th>รหัส</th>
                     <th>ชื่อ-นามสกุล (คลิกเพื่อดูข้อมูล)</th>
-                    <th>เพศ</th>
-                    <th>จังหวัด</th>
                     <th>สถานะสมัคร</th>
                     <th>สถานะเช็คอิน</th>
                     <th>จัดการอนุมัติ</th>
@@ -141,9 +139,6 @@ unset($_SESSION['success_msg'], $_SESSION['error_msg']);
                                     <?php echo htmlspecialchars($reg['name']); ?>
                                 </a>
                             </td>
-
-                            <td><?php echo htmlspecialchars($reg['gender']); ?></td>
-                            <td><?php echo htmlspecialchars($reg['province']); ?></td>
 
                             <?php
                             $status = empty($reg['status']) ? 'Pending' : $reg['status'];

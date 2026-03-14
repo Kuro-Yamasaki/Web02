@@ -7,7 +7,7 @@ $thai_provinces = [
     "แพร่", "ภูเก็ต", "มหาสารคาม", "มุกดาหาร", "แม่ฮ่องสอน", "ยโสธร", "ยะลา", "ร้อยเอ็ด", "ระนอง", "ระยอง", "ราชบุรี", 
     "ลพบุรี", "ลำปาง", "ลำพูน", "เลย", "ศรีสะเกษ", "สกลนคร", "สงขลา", "สตูล", "สมุทรปราการ", "สมุทรสงคราม", "สมุทรสาคร", 
     "สระแก้ว", "สระบุรี", "สิงห์บุรี", "สุโขทัย", "สุพรรณบุรี", "สุราษฎร์ธานี", "สุรินทร์", "หนองคาย", "หนองบัวลำภู", 
-    "อ่างทอง", "อำนาจเจริญ", "อุดรธานี", "อุตรดิตถ์", "อุทัยธานี", "อุบลราชธานี", "อื่นๆ"
+    "อ่างทอง", "อำนาจเจริญ", "อุดรธานี", "อุตรดิตถ์", "อุทัยธานี", "อุบลราชธานี"
 ];
 ?>
 <!DOCTYPE html>
@@ -46,7 +46,7 @@ $thai_provinces = [
     <h1 class="text-2xl font-light mb-4">Create your account</h1>
 
     <div class="bg-white border border-[#d8dee4] rounded-lg p-5 w-full max-w-[340px] shadow-sm">
-        <form action="/entrypj/routes/User.php?url=User" method="POST" class="space-y-4">
+        <form action="/entrypj/routes/register.php?url=User" method="POST" class="space-y-4">
             <input type="hidden" name="action" value="register">
 
             <div>

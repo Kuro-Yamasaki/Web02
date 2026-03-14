@@ -124,7 +124,7 @@
             <a href="/entrypj/history.php" class="nav-link">📜 ประวัติ</a>
             <a href="/entrypj/manage_event.php" class="nav-link">⚙️ จัดการกิจกรรม</a>
             
-            <a href="/entrypj/routes/User.php?action=logout" class="btn-logout">🚪 ออกจากระบบ</a>
+            <a href="/entrypj/routes/logout.php?action=logout" class="btn-logout">🚪 ออกจากระบบ</a>
         </div>
 
     </div>
